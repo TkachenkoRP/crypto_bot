@@ -3,7 +3,7 @@ spring:
     name: CryptoBot
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   datasource:
     url: jdbc:postgresql://localhost:5432/db
     username: root
@@ -17,6 +17,8 @@ telegram:
       delay:
         value: 10
         unit: MINUTES
+      check:
+        cron: "0 */2 * ? * *"
 
 binance:
   api:

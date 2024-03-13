@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tkachenko.cryptobot.model.Subscriber;
 import ru.tkachenko.cryptobot.repository.SubscriberRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -36,5 +38,9 @@ public class SubscriberService {
         subscriber.setSubscriptionPrice(price);
 
         subscriberRepository.save(subscriber);
+    }
+
+    public List<Subscriber> getSubscriberPriceGreaterThan(Double price) {
+        return subscriberRepository.findBySubscriptionPriceGreaterThan(price);
     }
 }
