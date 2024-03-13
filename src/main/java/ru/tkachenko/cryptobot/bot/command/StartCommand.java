@@ -1,16 +1,26 @@
 package ru.tkachenko.cryptobot.bot.command;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.tkachenko.cryptobot.model.Subscriber;
+import ru.tkachenko.cryptobot.service.SubscriberService;
+
+import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class StartCommand implements IBotCommand {
+
+    private final SubscriberService subscriberService;
+
     @Override
     public String getCommandIdentifier() {
         return "start";
@@ -23,6 +33,13 @@ public class StartCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] strings) {
+
+        try {
+            addSubscriber(message.getFrom());
+        } catch (TelegramApiException e) {
+            log.error("A subscriber verification error occurred.", e);
+        }
+
         SendMessage answer = new SendMessage();
         answer.setChatId(message.getChatId());
 
@@ -36,5 +53,18 @@ public class StartCommand implements IBotCommand {
         } catch (TelegramApiException e) {
             log.error("Error occurred in /start command", e);
         }
+    }
+
+    private void addSubscriber(User user) throws TelegramApiException {
+        Subscriber subscriber = new Subscriber();
+        subscriber.setId(UUID.randomUUID());
+        subscriber.setTelegramId(user.getId());
+
+        if (subscriberService.isSubscriberExists(subscriber.getTelegramId())) {
+            return;
+        }
+
+        subscriberService.save(subscriber);
+        log.info("New subscriber added - " + subscriber.getTelegramId());
     }
 }
