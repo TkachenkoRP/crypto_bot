@@ -27,6 +27,12 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    implementation("org.telegram:telegrambots:6.9.7.1")
+    implementation("org.telegram:telegrambotsextensions:6.9.7.1")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    testImplementation("ch.qos.logback:logback-classic:1.5.3")
+    implementation("ch.qos.logback:logback-core:1.5.3")
 }
 
 tasks.withType<Test> {
