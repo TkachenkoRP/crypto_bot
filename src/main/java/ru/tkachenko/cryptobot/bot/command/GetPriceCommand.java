@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.tkachenko.cryptobot.service.CryptoCurrencyService;
-import ru.tkachenko.cryptobot.utils.TextUtil;
 
 @Service
 @Slf4j
@@ -32,7 +31,7 @@ public class GetPriceCommand implements IBotCommand {
         SendMessage answer = new SendMessage();
         answer.setChatId(message.getChatId());
         try {
-            answer.setText("Текущая цена биткоина " + TextUtil.toString(service.getBitcoinPrice()) + " USD");
+            answer.setText(service.getBitcoinPriceText());
             absSender.execute(answer);
         } catch (Exception e) {
             log.error("Ошибка возникла /get_price методе", e);

@@ -34,11 +34,7 @@ public class StartCommand implements IBotCommand {
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] strings) {
 
-        try {
-            addSubscriber(message.getFrom());
-        } catch (TelegramApiException e) {
-            log.error("A subscriber verification error occurred.", e);
-        }
+        addSubscriber(message.getFrom());
 
         SendMessage answer = new SendMessage();
         answer.setChatId(message.getChatId());
@@ -46,6 +42,7 @@ public class StartCommand implements IBotCommand {
         answer.setText("""
                 Привет! Данный бот помогает отслеживать стоимость биткоина.
                 Поддерживаемые команды:
+                 /subscribe [число] - подписаться на стоимость биткоина в USD
                  /get_price - получить стоимость биткоина
                 """);
         try {
@@ -55,7 +52,7 @@ public class StartCommand implements IBotCommand {
         }
     }
 
-    private void addSubscriber(User user) throws TelegramApiException {
+    private void addSubscriber(User user) {
         Subscriber subscriber = new Subscriber();
         subscriber.setId(UUID.randomUUID());
         subscriber.setTelegramId(user.getId());

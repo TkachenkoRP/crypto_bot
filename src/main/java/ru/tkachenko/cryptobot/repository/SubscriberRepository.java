@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface SubscriberRepository extends JpaRepository<Subscriber, UUID> {
     boolean existsByTelegramId(Long telegramId);
+
+    Subscriber getSubscriberByTelegramId(Long telegramId);
 }

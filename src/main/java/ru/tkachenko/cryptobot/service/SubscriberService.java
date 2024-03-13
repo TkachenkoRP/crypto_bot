@@ -17,4 +17,20 @@ public class SubscriberService {
     public boolean isSubscriberExists(Long telegramId) {
         return subscriberRepository.existsByTelegramId(telegramId);
     }
+
+    public Subscriber getByTelegramId(Long telegramId) {
+        return subscriberRepository.getSubscriberByTelegramId(telegramId);
+    }
+
+    public void changeSubscriptionPrice(Long telegramId, Double price) {
+        Subscriber subscriber = getByTelegramId(telegramId);
+
+        if (subscriber == null) {
+            return;
+        }
+
+        subscriber.setSubscriptionPrice(price);
+
+        subscriberRepository.save(subscriber);
+    }
 }
